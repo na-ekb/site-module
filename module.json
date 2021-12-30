@@ -1,0 +1,14 @@
+{
+    "name": "Site",
+    "alias": "site",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Site\\Providers\\SiteServiceProvider",
+        "Modules\\Site\\Providers\\ScheduleServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}
