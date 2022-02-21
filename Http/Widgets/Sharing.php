@@ -22,8 +22,6 @@ class Sharing extends AbstractWidget
      */
     public function run(Request $request)
     {
-        return view('site::partials.sharing', [
-            'socials' => MeetingDay::day(Carbon::now())->with('meeting')->get(),
-        ]);
+        return view('site::widgets.sharing');
     }
 }

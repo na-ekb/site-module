@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Http;
 
 use Carbon\Carbon;
 
+use Illuminate\Support\Facades\Log;
 use Modules\Site\Entities\Jft as JftModel;
 
 
@@ -52,9 +53,10 @@ class Jft implements ShouldQueue
             $from = strip_tags($from);
 
             JftModel::create([
-                'header' => $header,
-                'quote'  => html_entity_decode($quote),
-                'from'   => $from
+                'header'        => $header,
+                'quote'         => html_entity_decode($quote),
+                'from'          => $from,
+                'created_at'    => Carbon::now()->setTimezone(config('Site.site_jft_timezone'))
             ]);
         }
     }

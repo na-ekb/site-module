@@ -3,11 +3,14 @@
 namespace Modules\Site\Entities;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+use Spatie\Sitemap\Tags\Url;
 use Spatie\Translatable\HasTranslations;
 use Spatie\ResponseCache\Facades\ResponseCache;
+use Spatie\Sitemap\Contracts\Sitemapable;
 
-class Page extends Model
+class Page extends Model implements Sitemapable
 {
     use HasTranslations;
 
@@ -35,8 +38,9 @@ class Page extends Model
 
     /**
      * Get the meta of page.
+     * @return BelongsTo
      */
-    public function pageMeta()
+    public function pageMeta(): BelongsTo
     {
         return $this->belongsTo(PageMeta::class);
     }
@@ -46,7 +50,7 @@ class Page extends Model
      *
      * @return void
      */
-    public static function bootClearsResponseCache()
+    public static function bootClearsResponseCache(): void
     {
         self::created(function () {
             ResponseCache::forget("/{$this->slug}");
@@ -55,5 +59,13 @@ class Page extends Model
         self::updated(function () {
             ResponseCache::forget("/{$this->slug}");
         });
+    }
+
+    /**
+     * @return Url|string|array
+     */
+    public function toSitemapTag(): Url|string|array
+    {
+        return route('pages', ['slug' => $this->slug]);
     }
 }

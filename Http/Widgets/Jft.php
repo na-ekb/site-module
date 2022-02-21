@@ -2,8 +2,8 @@
 
 namespace Modules\Site\Http\Widgets;
 
-use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 use Arrilot\Widgets\AbstractWidget;
 
@@ -26,9 +26,13 @@ class Jft extends AbstractWidget
     public function run(Request $request)
     {
         if (!JftModel::today()->exists()) {
-            JftJob::dispatchSync();
+            try {
+                JftJob::dispatchSync();
+            } catch (\Throwable $e) {
+                Log::error("Jft sync error {$e->getMessage()}");
+            }
         }
-        return view('site::partials.jft', [
+        return view('site::widgets.jft', [
             'jft' => JftModel::today()->first(),
         ]);
     }

@@ -3,7 +3,7 @@
     <meta name="description" content="{{ $page->pageMeta->description ?? '' }}">
     <meta name="keywords" content="АН, Анонимные Наркоманы, Екатеринбург, Свердловская область">
     <link rel="icon" type="image/png" href="{{ asset('img/og-logo.png') }}">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <link type="text/plain" rel="author" href="{{ asset('humans.txt') }}">
 
     <meta property="og:type" content="website">
@@ -34,10 +34,4 @@
     <meta name="theme-color" content="#495c9c">
 
     {!! $meta->meta_tags ?? '' !!}
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link href="{{ asset('css/site.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/cookieDisclaimer.css') }}" rel="stylesheet">
-
-    @stack('css')
 </head>

@@ -2,7 +2,7 @@
 
 namespace Modules\Site\Providers;
 
-use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Factory;
 use Illuminate\Routing\Router;
@@ -11,7 +11,6 @@ use Laravel\Nova\Nova;
 use Laravel\Nova\Panel;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Timezone;
-
 use OptimistDigital\NovaSettings\NovaSettings;
 use Spatie\ResponseCache\Middlewares\CacheResponse;
 use Spatie\ResponseCache\Middlewares\DoNotCacheResponse;
@@ -21,6 +20,9 @@ use Modules\Site\Nova\PageMeta;
 use Modules\Site\Http\Widgets\Meetings;
 use Modules\Site\Http\Widgets\CountMeetings;
 use Modules\Site\Http\Widgets\Jft;
+use Modules\Site\Http\Widgets\Sharing;
+use Modules\Site\Http\Widgets\Feedback;
+use Modules\Site\Console\GenerateSitemap;
 use App\Models\Setting;
 
 class SiteServiceProvider extends ServiceProvider
@@ -48,7 +50,9 @@ class SiteServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
 
         $router = $this->app->make(Router::class);
-        $router->pushMiddlewareToGroup('web', CacheResponse::class);
+        if (!$this->app->isLocal()) {
+            $router->pushMiddlewareToGroup('web', CacheResponse::class);
+        }
         $router->aliasMiddleware('doNotCacheResponse', DoNotCacheResponse::class);
 
         config([
@@ -76,7 +80,9 @@ class SiteServiceProvider extends ServiceProvider
                 [
                     'meetings'  => Meetings::class,
                     'jft'       => Jft::class,
-                    'count'     => CountMeetings::class
+                    'count'     => CountMeetings::class,
+                    'sharing'   => Sharing::class,
+                    'feedback'  => Feedback::class,
                 ]
             )
         ]);
@@ -103,6 +109,10 @@ class SiteServiceProvider extends ServiceProvider
                 ),
             ]),
         ], [], 'site');
+
+        $this->commands([
+            GenerateSitemap::class,
+        ]);
     }
 
     /**

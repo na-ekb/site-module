@@ -18,6 +18,8 @@ class ScheduleServiceProvider extends ServiceProvider
                     ->dailyAt('00:00')
                     ->timezone(config('Site.site_jft_timezone', 'Europe/Moscow'));
             }
+
+            $schedule->command('sitemap:generate')->daily();
         });
     }
 

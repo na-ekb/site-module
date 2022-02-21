@@ -1,5 +1,12 @@
 <footer>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <link href="{{ asset('css/site.css') }}" rel="stylesheet">
+    @stack('css')
+
+    @routes
+    <script>
+        window.timezone = '{{ config('app.timezone') }}';
+    </script>
+    <script src="{{ asset('js/site-main.js') }}"></script>
     @stack('js')
     {!! $meta->scripts ?? '' !!}
     @if(!empty(config('Site.site_footer')))

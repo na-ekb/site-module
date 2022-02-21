@@ -13,10 +13,10 @@ class CreateJftTable extends Migration
      */
     public function up()
     {
-        Schema::create('jft', function (Blueprint $table) {
+        Schema::create('jfts', function (Blueprint $table) {
             $table->id();
             $table->string('header');
-            $table->string('quote');
+            $table->text('quote');
             $table->string('from');
             $table->timestamps();
 
@@ -31,6 +31,6 @@ class CreateJftTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tg_jft');
+        Schema::dropIfExists('jfts');
     }
 }

@@ -18,7 +18,8 @@ class Jft extends Model
     protected $fillable = [
         'header',
         'quote',
-        'from'
+        'from',
+        'created_at'
     ];
 
     /**
@@ -37,7 +38,7 @@ class Jft extends Model
      * @return void
      */
     public static function scopeToday(Builder $query) :void {
-        $today = Carbon::today()->setTimezone(config('Site.site_jft_timezone'));
+        $today = Carbon::now()->setTimezone(config('Site.site_jft_timezone'));
         $query->whereMonth('created_at', $today->month)->whereDay('created_at', $today->day);
     }
 }
