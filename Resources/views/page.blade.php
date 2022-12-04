@@ -2,11 +2,10 @@
 
 @section('sidebar')
     @parent
-    <p>This is appended to the master sidebar.</p>
 @endsection
 
 @section('content')
-    <h1>{{ $page->title }}</h1>
+    <h1 class="text-center text-md-start">{{ $page->title }}</h1>
     <br>
     {!! $page->content !!}
     <hr>

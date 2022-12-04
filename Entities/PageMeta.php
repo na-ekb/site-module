@@ -24,7 +24,10 @@ class PageMeta extends Model
         'description',
         'keywords',
         'meta_tags',
-        'scripts'
+        'scripts',
+        'sitemap',
+        'changefreq',
+        'priority'
     ];
 
     /**
@@ -44,8 +47,8 @@ class PageMeta extends Model
     /**
      * Get the page of this meta.
      */
-    public function page()
+    public function pages()
     {
-        return $this->hasOne(Page::class);
+        return $this->hasMany(Page::class);
     }
 }

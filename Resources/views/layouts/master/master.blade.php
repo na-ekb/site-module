@@ -5,12 +5,12 @@
         @include('site::layouts.master.partials.menu')
 
         @section('sidebar')
-            This is the master sidebar.
+
         @show
 
-        <div class="content container">
-            <div class="row">
-                <div class="col">
+        <div class="content container w-100 @stack('content-classes')">
+            <div class="row w-100 @stack('content-row-classes')">
+                <div class="col @stack('content-col-classes')">
                 @yield('content')
                 </div>
             </div>

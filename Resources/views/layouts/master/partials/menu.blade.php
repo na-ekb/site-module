@@ -8,7 +8,7 @@
     <nav class="navbar navbar-expand-xl fixed-bottom fixed-md-top navbar-blue mobile-nav">
         <div class="container">
             <div class="logo-nav" role="img" alt="Логотип"></div>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainMenu" aria-controls="mainMenu" aria-expanded="false" aria-label="Открыть меню">
+            <button id="toggle-nav" class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainMenu" aria-controls="mainMenu" aria-expanded="false" aria-label="Открыть меню">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="mainMenu">

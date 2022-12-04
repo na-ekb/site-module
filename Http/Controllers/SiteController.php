@@ -30,15 +30,21 @@ class SiteController extends Controller
         return view('site::page', ['page' => $page]);
     }
 
-    public function widgetAction(string $name, string $action) {
+    public function widgetAction(Request $request, string $name, string $action) {
         $widgets = config('widgets');
         if (empty($widgets[$name]) || !method_exists($widgets[$name], $action)) {
             abort(404);
         }
 
         $widget = new $widgets[$name];
-        if (!in_array($action, $widget->actions)) {
+        if (!in_array($action, array_keys($widget->actions)) && !in_array($action, $widget->actions)) {
             abort(404);
+        }
+
+        if (in_array($action, array_keys($widget->actions))) {
+            $request = $widget->actions[$action]::createFrom($request);
+            $this->validate($request, $request->rules());
+            return $widget->{$action}($request);
         }
 
         return $widget->{$action}();

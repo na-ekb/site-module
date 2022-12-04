@@ -9,8 +9,8 @@
 		<a aria-label="Поделиться ВК" rel="noopener" href="https://vk.com/share.php?url={{ url()->current() }}" data-js="reachGoal" data-goal="SHARE_VK" target="_blank">
 			<span class="share-vk"></span>
 		</a>
-		<a aria-label="Поделиться Facebook" rel="noopener" href="https://www.facebook.com/sharer.php?u={{ url()->current() }}" data-js="reachGoal" data-goal="SHARE_FB" target="_blank">
-			<span class="share-fb"></span>
+		<a aria-label="Поделиться Telegram" rel="noopener" href="https://t.me/share/url?url={{ url()->current() }}" data-js="reachGoal" data-goal="SHARE_TG" target="_blank">
+			<span class="share-tg"></span>
 		</a>
 		<a aria-label="Поделиться Одноклассники" rel="noopener" href="https://connect.ok.ru/offer?url={{ url()->current() }}" data-js="reachGoal" data-goal="SHARE_OK" target="_blank">
 			<span class="share-ok"></span>

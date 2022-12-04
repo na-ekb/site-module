@@ -5,6 +5,7 @@
     @routes
     <script>
         window.timezone = '{{ config('app.timezone') }}';
+        window.siteLocale = localStorage.getItem('locale') === null ? '{!! config('default_lang') !!}' : localStorage.getItem('locale');
     </script>
     <script src="{{ asset('js/site-main.js') }}"></script>
     @stack('js')

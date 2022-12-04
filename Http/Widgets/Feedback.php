@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 use Arrilot\Widgets\AbstractWidget;
+use Modules\Site\Http\Requests\FeedbackRequest;
 
 class Feedback extends AbstractWidget
 {
@@ -22,7 +23,7 @@ class Feedback extends AbstractWidget
      * @var string[]
      */
     public $actions = [
-        'sendFeedback'
+        'sendFeedback' => FeedbackRequest::class
     ];
 
     /**
@@ -34,7 +35,7 @@ class Feedback extends AbstractWidget
         return view('site::widgets.feedback');
     }
 
-    public function sendFeedback() {
-        return '123';
+    public function sendFeedback(FeedbackRequest $request) {
+        return back()->with('success', 'Сообщение отправлено.');
     }
 }

@@ -7,6 +7,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Factory;
 use Illuminate\Routing\Router;
 
+use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Nova;
 use Laravel\Nova\Panel;
 use Laravel\Nova\Fields\Text;
@@ -55,6 +56,7 @@ class SiteServiceProvider extends ServiceProvider
         }
         $router->aliasMiddleware('doNotCacheResponse', DoNotCacheResponse::class);
 
+
         config([
             'Site' => Setting::where('key', 'like', 'site_%')
                 ->get()
@@ -62,19 +64,13 @@ class SiteServiceProvider extends ServiceProvider
                 ->transform(function ($setting) {
                     return $setting->value;
                 })
-                ->toArray()
-        ]);
-
-        config([
+                ->toArray(),
             'nova-group-order' => array_merge(
                 config('nova-group-order') ?? [],
                 [
                     __('site::admin/resources/groups.site') => 1,
                 ]
-            )
-        ]);
-
-        config([
+            ),
             'widgets' => array_merge(
                 config('widgets') ?? [],
                 [
@@ -100,13 +96,23 @@ class SiteServiceProvider extends ServiceProvider
             Panel::make(__('site::admin/settings.widget_jft.title'), [
                 Text::make(__('site::admin/settings.widget_jft.link'), 'site_jft_link'),
                 Text::make(__('site::admin/settings.widget_jft.parse_link'), 'site_jft_parse_link')
-                ->help(
-                    __('site::admin/settings.widget_jft.parse_link_help')
-                ),
+                    ->help(
+                        __('site::admin/settings.widget_jft.parse_link_help')
+                    ),
                 Timezone::make(__('site::admin/settings.widget_jft.timezone'), 'site_jft_timezone')
-                ->help(
-                    __('site::admin/settings.widget_jft.timezone_help')
-                ),
+                    ->help(
+                        __('site::admin/settings.widget_jft.timezone_help')
+                    ),
+            ]),
+            Panel::make(__('site::admin/settings.widget_feedback.title'), [
+                Select::make(__('site::admin/settings.widget_feedback.provider'), 'site_feedback_provider')
+                    ->options([
+                        'smtp'  => 'SMTP',
+                        'tg'    => 'Telegram',
+                    ])
+                    ->help(
+                        __('site::admin/settings.widget_feedback.provider_help')
+                    ),
             ]),
         ], [], 'site');
 

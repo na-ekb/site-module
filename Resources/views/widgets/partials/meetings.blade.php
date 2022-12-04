@@ -1,5 +1,8 @@
-@foreach($meetingDays as $meetingDay)
+@forelse($meetingDays as $meetingDay)
     @php
+        if(empty($meetingDay->meeting) || (empty($meetingDay->meeting->type) && $meetingDay->meeting->type != 0)) {
+            continue;
+        }
         if(
             $meetingDay->meeting->type == \App\Enums\MeetingsType::OnlyStream ||
             (
@@ -12,22 +15,22 @@
             $online = false;
         }
     @endphp
-    <div class="meeteng-group gray-group p-4 flex-column flex-md-row my-3">
-        <div class="meeteng-group-all-time">
-            <div class="meeteng-group-time">
-                <div class="meeteng-group-time-block">
+    <div class="meeting-group gray-group p-4 flex-column flex-md-row my-3">
+        <div class="meeting-group-all-time">
+            <div class="meeting-group-time">
+                <div class="meeting-group-time-block">
                     <span>{{ $meetingDay->time[0] }}</span>
                 </div>
-                <div class="meeteng-group-time-block">
+                <div class="meeting-group-time-block">
                     <span>{{ $meetingDay->time[1] }}</span>
                 </div>
-                <div class="meeteng-group-time-center">
+                <div class="meeting-group-time-center">
                     <span>:</span>
                 </div>
-                <div class="meeteng-group-time-block">
+                <div class="meeting-group-time-block">
                     <span>{{ $meetingDay->time[3] }}</span>
                 </div>
-                <div class="meeteng-group-time-block">
+                <div class="meeting-group-time-block">
                     <span>{{ $meetingDay->time[4] }}</span>
                 </div>
             </div>
@@ -37,7 +40,7 @@
             @endphp
             <p> {{ morphos\Russian\pluralize($hours, 'час') }} @if($minutes > 0) {{ morphos\Russian\pluralize($minutes, 'минута') }} @endif </p>
         </div>
-        <div class="meeteng-group-info align-items-center align-items-md-start px-5">
+        <div class="meeting-group-info align-items-center align-items-md-start px-1 px-md-5">
             <div class="group-info-row group-name blue">
                 <span class="icon icon-minilogo top-0 me-3 d-none d-md-inline-block"></span>
                 {{ $meetingDay->meeting->title }}
@@ -51,7 +54,12 @@
                     @endif
                 @else
                     <span class="icon icon-address top-0 me-3 d-none d-md-inline-block"></span>
-                    {!! str_replace(' ', '&nbsp;', $meetingDay->meeting->address) . ((!empty($meetingDay->meeting->address_description)) ? ", " . str_replace(' ', '&nbsp;', $meetingDay->meeting->address_description) : '') !!}
+                    <div class="d-flex flex-column align-items-center align-items-md-start">
+                        <div>
+                            <button type="button" class="btn-href" data-js="selectCity" data-city="{{ $meetingDay->meeting->city }}">{!! str_replace(' ', '&nbsp;', $meetingDay->meeting->city) !!}</button>
+                        </div>
+                        {!! str_replace(' ', '&nbsp;', $meetingDay->meeting->address) . ((!empty($meetingDay->meeting->address_description)) ? ", " . str_replace(' ', '&nbsp;', mb_lcfirst($meetingDay->meeting->address_description)) : '') !!}
+                    </div>
                 @endif
             </span>
             @if(!empty($meetingDay->meeting->description))
@@ -63,21 +71,27 @@
                 </div>
             @endif
         </div>
-        <div class="meeteng-description">
-            <p class="meeteng-description-title fs-16 fs-md-14 fs-xl-16">
+        <div class="meeting-description">
+            <p class="meeting-description-title d-flex justify-content-center justify-content-md-end  col-4 col-md-12 order-sm-1 order-md-1 fs-16 fs-md-14 fs-xl-16">
                 <button class="btn-href">{{ $online ? 'Онлайн' : $meetingDay->meeting->location }}</button>
             </p>
-            <p class="meeteng-description-text fs-16 fs-md-14 fs-xl-16">
+            <p class="meeting-description-text d-flex justify-content-center justify-content-md-end col-4 col-md-12 order-sm-3 order-md-2 order-lg-3 fs-16 fs-md-14 fs-xl-16">
                 {{ $meetingDay->meetingDayFormat->title }}
-                <button class="btn-href d-inline-block" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="{{ $meetingDay->meetingDayFormat->description }}">
+                <button class="btn-href d-inline-block ms-1" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="{{ $meetingDay->meetingDayFormat->description }}">
                     <i class="bi bi-info-square" role="img" aria-label="Что это значит?"></i>
                 </button>
             </p>
             @if(!empty($meetingDay->format_second))
-                <p class="meeteng-description-text fs-16 fs-md-14 fs-xl-16">
+                <p class="meeting-description-text d-flex justify-content-center justify-content-md-end col-4 col-md-12 order-sm-2 order-md-3 fs-16 fs-md-14 fs-xl-16">
                     {{ $meetingDay->format_second }}
                 </p>
             @endif
         </div>
     </div>
-@endforeach
+@empty
+    <div class="meeting-group gray-group p-4 flex-column flex-md-row my-3 justify-content-center">
+        <div>
+            Собраний по такому фильтру не найдено.
+        </div>
+    </div>
+@endforelse

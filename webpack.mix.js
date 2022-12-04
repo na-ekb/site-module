@@ -8,7 +8,7 @@ let publicPath = '../../public';
 
 mix.setPublicPath(publicPath).mergeManifest();
 
-mix.copyDirectory(__dirname + '/Resources/assets/img', `${publicPath}/img`);
+mix.copy(__dirname + '/Resources/assets/img/*', `${publicPath}/img/*`);
 
 mix.js(__dirname + '/Resources/assets/js/main.js', 'js/site-main.js')
     .js(__dirname + '/Resources/assets/js/meetings.js', 'js/site-meetings.js')

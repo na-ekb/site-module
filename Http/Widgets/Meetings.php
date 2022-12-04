@@ -2,10 +2,14 @@
 
 namespace Modules\Site\Http\Widgets;
 
+use App\Models\Meeting;
+use App\Models\MeetingDayFormat;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Carbon;
+use Illuminate\Validation\Rule;
 
 use Arrilot\Widgets\AbstractWidget;
-use Carbon\Carbon;
 
 use App\Models\MeetingDay;
 use App\Enums\Weekdays;
@@ -34,14 +38,31 @@ class Meetings extends AbstractWidget
      */
     public function run(Request $request)
     {
-        $dayOfWeek = Carbon::now()->dayOfWeek;
-        $weekdaysArr = Weekdays::asSelectArray();
-        $key = array_search($dayOfWeek, array_keys($weekdaysArr), true);
-        if ($key !== false) {
-            $first = array_slice($weekdaysArr, $key, null, true);
-            $second = array_diff($weekdaysArr, $first);
-            $weekdaysArr = $first + $second;
+        $cities = Meeting::pluck('city')->unique()->filter()->toArray();
+        $locations = Meeting::pluck('location')->unique()->filter()->toArray();
+
+        if ($request->exists('date') || $request->exists('city')) {
+            $validator = Validator::make($request->all(), [
+                'date' => 'nullable|date',
+                'city' => [
+                    'nullable',
+                    Rule::in($cities)
+                ],
+                'location' => [
+                    'nullable',
+                    Rule::in($locations)
+                ]
+            ]);
+            if ($validator->fails()) {
+                abort(404);
+            }
+            $currentDate = Carbon::parse($request->get('date'));
+        } else {
+            $currentDate = Carbon::now();
         }
+
+        $dayOfWeek = $currentDate->dayOfWeek;
+
         if (empty($request->all())) {
             $meetings = MeetingDay::day()->with('meeting', 'meetingDayFormat')->orderBy('time')->get();
         } else {
@@ -50,10 +71,14 @@ class Meetings extends AbstractWidget
 
         return view('site::widgets.meetings', [
             'meetingDays'   => $meetings,
+            'cities'        => $cities,
+            'city'          => $request->get('city') ?? 0,
+            'locations'     => $locations,
+            'location'      => $request->get('location') ?? 0,
             'time'          => Carbon::now()->format('H:i'),
-            'date'          => \Date::now()->format('j F Y'),
+            'date'          => $currentDate->isoFormat('D MMMM Y'),
             'dayOfWeek'     => $dayOfWeek,
-            'weekdays'      => $weekdaysArr
+            'weekdays'      => Weekdays::asSelectArray()
         ]);
     }
 
